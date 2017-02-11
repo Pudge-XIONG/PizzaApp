@@ -22,59 +22,34 @@ public class PizzaApp {
      */
     public static void main(String... args) throws Exception {
 
-        PizzaApp pizzaApp = new PizzaApp("C:\\Users\\zjyju\\IdeaProjects\\pizza\\small.in");
+        Pizza pizza = new Pizza("C:\\Users\\zjyju\\IdeaProjects\\pizza\\small.in");
 
-        printPizza(pizzaApp.pizza);
+        printPizza(pizza);
+
+        Algo1 algo1 = new Algo1(pizza);
+
+        algo1.generateAllPossibleSlice();
+        algo1.getAllIndependent();
+
     }
 
 
-    public PizzaApp(String inputFileName){
-        loadInput(inputFileName);
-    }
 
-    private void loadInput(String inputFileName){
-        String line;
-        try {
-                InputStream fis = new FileInputStream(inputFileName);
-                InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
-                BufferedReader br = new BufferedReader(isr);
+    private static void printPizza(Pizza pizza){
 
-                int line_num = 0;
-                while ((line = br.readLine()) != null) {
-                    // Deal with the line
-                    //System.out.println(line);
-                    if(line_num == 0){
-                        // first line
-                        String[] values = line.split(SEPERATOR);
-                        R = Integer.parseInt(values[0]);
-                        C = Integer.parseInt(values[1]);
-                        L = Integer.parseInt(values[2]);
-                        H = Integer.parseInt(values[3]);
-                        pizza = new char[R][C];
-                    } else{
-                        int current_r = line_num - 1;
-                        pizza[current_r] = line.toCharArray();
-
-                    }
-                    line_num ++;
-                }
-        }catch(IOException e){
-            e.printStackTrace();
-            System.out.println("Error while read line : " + e.getMessage());
-        }
-    }
-
-    private static void printPizza(char[][] pizza){
-        for(char[] row : pizza){
+        for(char[] row : pizza.getCells()){
             for(char cell : row){
                 System.out.print(cell);
                 System.out.print(' ');
             }
             System.out.println();
         }
+
+        System.out.println("tomcat : " + pizza.getTomateAccount());
+        System.out.println("mushroom : " + pizza.getMushroomAccount());
     }
 
-
-
 }
+
+
 
