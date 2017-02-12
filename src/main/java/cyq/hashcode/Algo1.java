@@ -2,6 +2,7 @@ package cyq.hashcode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by zjyju on 11/02/2017.
@@ -107,7 +108,7 @@ public class Algo1 {
             Slice slice = allPossibleSliceList.get(index);
 
             List<Integer> indexList = new ArrayList<>();
-            for(int index1 = index+1; index1 < size; index1 ++){
+            for(int index1 = 0; index1 < size; index1 ++){
                 if(!isOverLay(slice, allPossibleSliceList.get(index1))){
                     independentArray[index][index1] = 1;
                     independentArray[index1][index] = 1;
@@ -127,7 +128,7 @@ public class Algo1 {
         int i=0;
         int n=0;    // loop index
 
-        while (max_surface<R*C && n<size) {
+        while (max_surface<R*C && n<10000) {
             Slice slice = allPossibleSliceList.get(i);
             List<Integer> comb = new ArrayList<>();
             comb.add(i);
@@ -143,6 +144,7 @@ public class Algo1 {
 
             n++;
             i++;
+            i=i%size ;
 
         }
 
@@ -159,7 +161,10 @@ public class Algo1 {
     public Integer addFirstValideSlice(List<Integer> potentialSlices, List<Integer> addedSlices)  {
 
         if (potentialSlices.size()>0) {
-            int newSlice = potentialSlices.get(0);
+            Random rr = new Random();
+            int s=rr.nextInt() % potentialSlices.size();
+            s= s<0 ? -s : s;
+            int newSlice = potentialSlices.get(s);
 
             addedSlices.add(newSlice);
             Slice slice = allPossibleSliceList.get(newSlice);
@@ -167,7 +172,7 @@ public class Algo1 {
             if (potentialSlices.size() > 1) {
                 List<Integer> remainSlices = new ArrayList<>();
 
-                for (int j = 1; j < potentialSlices.size(); j++) {
+                for (int j = 0; j < potentialSlices.size(); j++) {
                     if (independentArray[newSlice][potentialSlices.get(j)] == 1) {
                         remainSlices.add(potentialSlices.get(j));
                     }
