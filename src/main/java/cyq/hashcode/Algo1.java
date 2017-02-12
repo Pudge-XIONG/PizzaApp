@@ -8,15 +8,15 @@ import java.util.List;
  */
 public class Algo1 {
 
-    private int R;
-    private int C;
-    private int L;
-    private int H;
+    protected int R;
+    protected int C;
+    protected int L;
+    protected int H;
 
-    private int least;
-    private int most;
+    protected int least;
+    protected int most;
 
-    private char[][] cells;
+    protected char[][] cells;
 
     List<Slice> allPossibleSliceList = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class Algo1 {
         System.out.println("Total available slices account : " + allPossibleSliceList.size());
     }
 
-    private boolean isSliceValide(char[][] cells, Slice slice){
+    protected boolean isSliceValide(char[][] cells, Slice slice){
         int t_cell_num = 0;
         int m_cell_num = 0;
         for(int r = slice.getFirst_row(); r <= slice.getLast_row(); r ++){

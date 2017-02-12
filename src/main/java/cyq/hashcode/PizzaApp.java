@@ -22,14 +22,19 @@ public class PizzaApp {
      */
     public static void main(String... args) throws Exception {
 
-        Pizza pizza = new Pizza("C:\\Users\\zjyju\\IdeaProjects\\pizza\\small.in");
+        Pizza pizza = new Pizza("small.in");
 
         printPizza(pizza);
 
-        Algo1 algo1 = new Algo1(pizza);
+        // Algo1 algo1 = new Algo1(pizza);
 
-        algo1.generateAllPossibleSlice();
-        algo1.getAllIndependent();
+        // algo1.generateAllPossibleSlice();
+        // algo1.getAllIndependent();
+
+        AlgoYinxia algoYinxia = new AlgoYinxia(pizza);
+        algoYinxia.generateAllPossibleSlice();
+        algoYinxia.getAllIndependent();
+        algoYinxia.printListSliceForEachCell();
 
     }
 
