@@ -18,11 +18,16 @@ public class Algo1 {
 
     private char[][] cells;
 
-    List<Slice> allPossibleSliceList = new ArrayList<>();
+    private List<Slice> allPossibleSliceList = new ArrayList<>();
 
 
-    List<List<Integer>> independentList = new ArrayList<>();
-    int[][] independentArray;
+    private List<List<Integer>> independentList = new ArrayList<>();
+    private int[][] independentArray;
+
+    private List<Integer> combinaision = new ArrayList<>();
+
+    private int max_surface;
+    private int current_surface;
 
 
     public Algo1(Pizza pizza){
@@ -33,6 +38,9 @@ public class Algo1 {
         cells = pizza.getCells();
         least = 2*L;
         most = H;
+
+        max_surface = 0;
+        current_surface=0;
 
     }
 
@@ -99,9 +107,10 @@ public class Algo1 {
             Slice slice = allPossibleSliceList.get(index);
 
             List<Integer> indexList = new ArrayList<>();
-            for(int index1 = 0; index1 < size; index1 ++){
+            for(int index1 = index+1; index1 < size; index1 ++){
                 if(!isOverLay(slice, allPossibleSliceList.get(index1))){
                     independentArray[index][index1] = 1;
+                    independentArray[index1][index] = 1;
                     indexList.add(index1);
                 } else{
                     independentArray[index][index1] = 0;
@@ -113,7 +122,64 @@ public class Algo1 {
 
 
     public void getPossibleSlices(){
+        int size = allPossibleSliceList.size();
 
+        int i=0;
+        int n=0;    // loop index
+
+        while (max_surface<R*C && n<size) {
+            Slice slice = allPossibleSliceList.get(i);
+            List<Integer> comb = new ArrayList<>();
+            comb.add(i);
+
+            if (independentList.get(i).size()>0) {
+                current_surface = slice.getSurface() + addFirstValideSlice(independentList.get(i), comb);
+
+                if (max_surface < current_surface) {
+                    combinaision = comb;
+                    max_surface = current_surface;
+                }
+            }
+
+            n++;
+            i++;
+
+        }
+
+        System.out.println("Covered pieces : " + max_surface);
+        System.out.println(combinaision.size());
+
+        for(int s:combinaision) {
+            allPossibleSliceList.get(s).printSlice();
+        }
+
+
+    }
+
+    public Integer addFirstValideSlice(List<Integer> potentialSlices, List<Integer> addedSlices)  {
+
+        if (potentialSlices.size()>0) {
+            int newSlice = potentialSlices.get(0);
+
+            addedSlices.add(newSlice);
+            Slice slice = allPossibleSliceList.get(newSlice);
+
+            if (potentialSlices.size() > 1) {
+                List<Integer> remainSlices = new ArrayList<>();
+
+                for (int j = 1; j < potentialSlices.size(); j++) {
+                    if (independentArray[newSlice][potentialSlices.get(j)] == 1) {
+                        remainSlices.add(potentialSlices.get(j));
+                    }
+                }
+
+                return slice.getSurface() + addFirstValideSlice(remainSlices, addedSlices);
+            }
+
+            return slice.getSurface();
+        }
+
+        return 0;
     }
 
     private boolean isOverLay(Slice slice1, Slice slice2){
