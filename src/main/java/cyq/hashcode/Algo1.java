@@ -29,6 +29,7 @@ public class Algo1 {
 
     private int max_surface;
     private int current_surface;
+    private long max_try;
 
 
     public Algo1(Pizza pizza){
@@ -42,7 +43,7 @@ public class Algo1 {
 
         max_surface = 0;
         current_surface=0;
-
+        max_try=100000;
     }
 
     public void generateAllPossibleSlice(){
@@ -128,7 +129,7 @@ public class Algo1 {
         int i=0;
         int n=0;    // loop index
 
-        while (max_surface<R*C && n<10000) {
+        while (max_surface<R*C && n<max_try) {
             Slice slice = allPossibleSliceList.get(i);
             List<Integer> comb = new ArrayList<>();
             comb.add(i);
