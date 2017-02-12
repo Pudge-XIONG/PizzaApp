@@ -30,6 +30,7 @@ public class PizzaApp {
 
         algo1.generateAllPossibleSlice();
         algo1.getAllIndependent();
+        algo1.getPossibleSlices();
 
     }
 
@@ -45,7 +46,7 @@ public class PizzaApp {
             System.out.println();
         }
 
-        System.out.println("tomcat : " + pizza.getTomateAccount());
+        System.out.println("tomate : " + pizza.getTomateAccount());
         System.out.println("mushroom : " + pizza.getMushroomAccount());
     }
 
