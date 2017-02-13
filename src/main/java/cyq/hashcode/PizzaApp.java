@@ -22,16 +22,29 @@ public class PizzaApp {
      */
     public static void main(String... args) throws Exception {
 
-        Pizza pizza = new Pizza("C:\\Users\\zjyju\\IdeaProjects\\pizza\\small.in");
+        long startTime = System.currentTimeMillis();
+
+        Pizza pizza = new Pizza("medium.in");
+        long afterLoadingFileTime = System.currentTimeMillis();
+        System.out.println("File loading took " + (afterLoadingFileTime - startTime)/1000.0 + " seconds");
 
         printPizza(pizza);
+        long afterPrintPizzaTime = System.currentTimeMillis();
+        System.out.println("Printing pizza took " + (afterPrintPizzaTime - afterLoadingFileTime)/1000.0 + " seconds");
+
 
         Algo1 algo1 = new Algo1(pizza);
 
         algo1.generateAllPossibleSlice();
-        algo1.getAllIndependent();
+
+        long afterGereratAllPossibleSliceTime = System.currentTimeMillis();
+        System.out.println("Generating all possible Slices took " + (afterGereratAllPossibleSliceTime - afterPrintPizzaTime)/1000.0 + " seconds");
+
+        //algo1.getAllIndependent();
         algo1.getPossibleSlices();
 
+        long endTime = System.currentTimeMillis();
+        System.out.println("Looking for best solution took " + (endTime - afterGereratAllPossibleSliceTime)/1000.0 + " seconds");
     }
 
 
@@ -48,6 +61,7 @@ public class PizzaApp {
 
         System.out.println("tomate : " + pizza.getTomateAccount());
         System.out.println("mushroom : " + pizza.getMushroomAccount());
+        System.out.println("Total cells : " + pizza.getMushroomAccount() + pizza.getTomateAccount());
     }
 
 }

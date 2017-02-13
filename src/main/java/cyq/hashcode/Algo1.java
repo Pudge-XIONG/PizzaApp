@@ -6,6 +6,9 @@ import java.util.Random;
 
 /**
  * Created by zjyju on 11/02/2017.
+ *
+ * version qxiong 20170213 We don't save independent list of all possible slices anymore
+ * because it causes an OutOfMemoryException when there are too many possible slices
  */
 public class Algo1 {
 
@@ -22,8 +25,8 @@ public class Algo1 {
     private List<Slice> allPossibleSliceList = new ArrayList<>();
 
 
-    private List<List<Integer>> independentList = new ArrayList<>();
-    private int[][] independentArray;
+    //private List<List<Integer>> independentList = new ArrayList<>();
+    //private int[][] independentArray;
 
     private List<Integer> combinaision = new ArrayList<>();
 
@@ -43,7 +46,7 @@ public class Algo1 {
 
         max_surface = 0;
         current_surface=0;
-        max_try=100000;
+        max_try=10000000;
     }
 
     public void generateAllPossibleSlice(){
@@ -100,6 +103,7 @@ public class Algo1 {
         return true;
     }
 
+    /*
     public void getAllIndependent(){
 
         int size = allPossibleSliceList.size();
@@ -121,8 +125,28 @@ public class Algo1 {
             independentList.add(indexList);
         }
     }
+    */
 
 
+    public List<Integer> getIndependentListOf(int index){
+
+        int size = allPossibleSliceList.size();
+        Slice slice = allPossibleSliceList.get(index);
+
+        List<Integer> indexList = new ArrayList<>();
+        for(int index1 = 0; index1 < size; index1 ++){
+            if(!isOverLay(slice, allPossibleSliceList.get(index1))){
+                indexList.add(index1);
+            }
+        }
+
+        return indexList;
+    }
+
+
+    /**
+     * @version qxiong 20170213 replace independentList.get(i) by using getIndependentListOf(i) which returns the independent list of slices of slice i
+     */
     public void getPossibleSlices(){
         int size = allPossibleSliceList.size();
 
@@ -134,12 +158,25 @@ public class Algo1 {
             List<Integer> comb = new ArrayList<>();
             comb.add(i);
 
+            /*
             if (independentList.get(i).size()>0) {
                 current_surface = slice.getSurface() + addFirstValideSlice(independentList.get(i), comb);
 
                 if (max_surface < current_surface) {
                     combinaision = comb;
                     max_surface = current_surface;
+                }
+            }
+            */
+            List<Integer> potentialSlices = getIndependentListOf(i);
+
+            if (potentialSlices.size()>0) {
+                current_surface = slice.getSurface() + addFirstValideSlice(potentialSlices, comb);
+
+                if (max_surface < current_surface) {
+                    combinaision = comb;
+                    max_surface = current_surface;
+                    System.out.println("current max surface is : " + max_surface);
                 }
             }
 
@@ -159,6 +196,10 @@ public class Algo1 {
 
     }
 
+
+    /**
+     * @version qxiong 20170213 replace independentArray[i] by using isOverLay(slice1, slice2) which returns detect if two slices are independent
+     */
     public Integer addFirstValideSlice(List<Integer> potentialSlices, List<Integer> addedSlices)  {
 
         if (potentialSlices.size()>0) {
@@ -174,9 +215,17 @@ public class Algo1 {
                 List<Integer> remainSlices = new ArrayList<>();
 
                 for (int j = 0; j < potentialSlices.size(); j++) {
+
+                    /*
                     if (independentArray[newSlice][potentialSlices.get(j)] == 1) {
                         remainSlices.add(potentialSlices.get(j));
                     }
+                    */
+
+                    if (!isOverLay(allPossibleSliceList.get(newSlice), allPossibleSliceList.get(potentialSlices.get(j)))) {
+                        remainSlices.add(potentialSlices.get(j));
+                    }
+
                 }
 
                 return slice.getSurface() + addFirstValideSlice(remainSlices, addedSlices);
