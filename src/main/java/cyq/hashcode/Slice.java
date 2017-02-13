@@ -8,6 +8,25 @@ public class Slice {
     private int first_column;
     private int last_row;
     private int last_column;
+    private int cells_num = 0;
+    private int tomatAccount;
+    private int mushroomAccount;
+
+    public int getTomatAccount() {
+        return tomatAccount;
+    }
+
+    public void setTomatAccount(int tomatAccount) {
+        this.tomatAccount = tomatAccount;
+    }
+
+    public int getMushroomAccount() {
+        return mushroomAccount;
+    }
+
+    public void setMushroomAccount(int mushroomAccount) {
+        this.mushroomAccount = mushroomAccount;
+    }
 
     public int getFirst_row() {
         return first_row;
@@ -39,5 +58,10 @@ public class Slice {
 
     public void setLast_column(int last_column) {
         this.last_column = last_column;
+    }
+
+    public int getCellsAccount(){
+        if(cells_num == 0) cells_num = (last_row - first_row + 1) * (last_column - first_column + 1);
+        return cells_num;
     }
 }
