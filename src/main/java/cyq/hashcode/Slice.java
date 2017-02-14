@@ -40,4 +40,17 @@ public class Slice {
     public void setLast_column(int last_column) {
         this.last_column = last_column;
     }
+
+    public int getSurface() { return (last_row-first_row+1)*(last_column-first_column+1); }
+
+    public void printSlice() {
+        System.out.print(first_row);
+        System.out.print(' ');
+        System.out.print(first_column);
+        System.out.print(' ');
+        System.out.print(last_row);
+        System.out.print(' ');
+        System.out.print(last_column);
+        System.out.println();
+    }
 }
