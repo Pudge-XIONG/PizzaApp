@@ -18,6 +18,10 @@ public class Pizza {
     private int tomateAccount = 0;
     private int mushroomAccount = 0;
 
+    public Pizza(Pizza parentPizza, Slice slice){
+
+    }
+
     public Pizza(String inputFilePath){
         loadInput(inputFilePath);
     }

@@ -2,9 +2,13 @@ package cyq.hashcode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by zjyju on 11/02/2017.
+ *
+ * version qxiong 20170213 We don't save independent list of all possible slices anymore
+ * because it causes an OutOfMemoryException when there are too many possible slices
  */
 public class Algo1 {
 
@@ -18,11 +22,17 @@ public class Algo1 {
 
     protected char[][] cells;
 
-    List<Slice> allPossibleSliceList = new ArrayList<>();
+    private List<Slice> allPossibleSliceList = new ArrayList<>();
 
 
-    List<List<Integer>> independentList = new ArrayList<>();
-    int[][] independentArray;
+    private List<List<Integer>> independentList = new ArrayList<>();
+    private int[][] independentArray;
+
+    private List<Integer> combinaision = new ArrayList<>();
+
+    private int max_surface;
+    private int current_surface;
+    private long max_try;
 
 
     public Algo1(Pizza pizza){
@@ -34,6 +44,9 @@ public class Algo1 {
         least = 2*L;
         most = H;
 
+        max_surface = 0;
+        current_surface=0;
+        max_try=10000;
     }
 
     public void generateAllPossibleSlice(){
@@ -68,6 +81,9 @@ public class Algo1 {
         }
 
         System.out.println("Total available slices account : " + allPossibleSliceList.size());
+
+        System.out.println("Now we try to refine the possible slices and remove those who can be composed by others");
+
     }
 
     protected boolean isSliceValide(char[][] cells, Slice slice){
@@ -90,30 +106,114 @@ public class Algo1 {
         return true;
     }
 
-    public void getAllIndependent(){
+
+    public List<Integer> getIndependentListOf(int index){
 
         int size = allPossibleSliceList.size();
-        independentArray = new int[size][size];
+        Slice slice = allPossibleSliceList.get(index);
 
-        for(int index = 0; index < size; index ++){
-            Slice slice = allPossibleSliceList.get(index);
-
-            List<Integer> indexList = new ArrayList<>();
-            for(int index1 = 0; index1 < size; index1 ++){
-                if(!isOverLay(slice, allPossibleSliceList.get(index1))){
-                    independentArray[index][index1] = 1;
-                    indexList.add(index1);
-                } else{
-                    independentArray[index][index1] = 0;
-                }
+        List<Integer> indexList = new ArrayList<>();
+        for(int index1 = 0; index1 < size; index1 ++){
+            if(!isOverLay(slice, allPossibleSliceList.get(index1))){
+                indexList.add(index1);
             }
-            independentList.add(indexList);
         }
+
+        return indexList;
     }
 
 
+    /**
+     * @version qxiong 20170213 replace independentList.get(i) by using getIndependentListOf(i) which returns the independent list of slices of slice i
+     */
     public void getPossibleSlices(){
+        int size = allPossibleSliceList.size();
 
+        int i=0;
+        int n=0;    // loop index
+
+        while (max_surface<R*C && n<max_try) {
+            Slice slice = allPossibleSliceList.get(i);
+            List<Integer> comb = new ArrayList<>();
+            comb.add(i);
+
+            /*
+            if (independentList.get(i).size()>0) {
+                current_surface = slice.getSurface() + addFirstValideSlice(independentList.get(i), comb);
+
+                if (max_surface < current_surface) {
+                    combinaision = comb;
+                    max_surface = current_surface;
+                }
+            }
+            */
+            List<Integer> potentialSlices = getIndependentListOf(i);
+
+            if (potentialSlices.size()>0) {
+                current_surface = slice.getSurface() + addFirstValideSlice(potentialSlices, comb);
+
+                if (max_surface < current_surface) {
+                    combinaision = comb;
+                    max_surface = current_surface;
+                    System.out.println("current max surface is : " + max_surface);
+                }
+            }
+
+            n++;
+            i++;
+            i=i%size ;
+
+        }
+
+        System.out.println("Covered pieces : " + max_surface);
+        System.out.println(combinaision.size());
+
+        for(int s:combinaision) {
+            allPossibleSliceList.get(s).printSlice();
+        }
+
+
+    }
+
+
+    /**
+     * @version qxiong 20170213 replace independentArray[i] by using isOverLay(slice1, slice2) which returns detect if two slices are independent
+     */
+    public Integer addFirstValideSlice(List<Integer> potentialSlices, List<Integer> addedSlices)  {
+
+        if (potentialSlices.size()>0) {
+            Random rr = new Random();
+            int s=rr.nextInt() % potentialSlices.size();
+            s= s<0 ? -s : s;
+            int newSlice = potentialSlices.get(s);
+
+            addedSlices.add(newSlice);
+            Slice slice = allPossibleSliceList.get(newSlice);
+
+            if (potentialSlices.size() > 1) {
+                List<Integer> remainSlices = new ArrayList<>();
+
+                for (int j = 0; j < potentialSlices.size(); j++) {
+
+                    /*
+                    if (independentArray[newSlice][potentialSlices.get(j)] == 1) {
+                        remainSlices.add(potentialSlices.get(j));
+                    }
+                    */
+
+                    if (!isOverLay(allPossibleSliceList.get(newSlice), allPossibleSliceList.get(potentialSlices.get(j)))) {
+                        remainSlices.add(potentialSlices.get(j));
+                    }
+
+                }
+
+                return slice.getSurface() + addFirstValideSlice(remainSlices, addedSlices);
+            }
+
+            return slice.getSurface();
+        }
+
+        return 0;
     }
 
     private boolean isOverLay(Slice slice1, Slice slice2){
