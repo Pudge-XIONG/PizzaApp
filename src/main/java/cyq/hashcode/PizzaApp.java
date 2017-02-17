@@ -16,7 +16,7 @@ public class PizzaApp {
 
         long startTime = System.currentTimeMillis();
 
-        Pizza pizza = new Pizza("small.in");
+        Pizza pizza = new Pizza("medium.in");
         long afterLoadingFileTime = System.currentTimeMillis();
         System.out.println("File loading took " + (afterLoadingFileTime - startTime)/1000.0 + " seconds");
 
@@ -27,13 +27,20 @@ public class PizzaApp {
 
         Algo1 algo1 = new Algo1(pizza);
 
-        // algo1.generateAllPossibleSlice();
-        // algo1.getAllIndependent();
+        algo1.generateAllPossibleSlice();
 
-        AlgoYinxia algoYinxia = new AlgoYinxia(pizza);
-        algoYinxia.generateAllPossibleSlice();
-        algoYinxia.getAllIndependent();
-        algoYinxia.printListSliceForEachCell();
+        long afterGereratAllPossibleSliceTime = System.currentTimeMillis();
+        System.out.println("Generating all possible Slices took " + (afterGereratAllPossibleSliceTime - afterPrintPizzaTime)/1000.0 + " seconds");
+
+        //algo1.getAllIndependent();
+        //long afterGereratAllIndependentTime = System.currentTimeMillis();
+        //System.out.println("Generating all independent list took " + (afterGereratAllIndependentTime - afterGereratAllPossibleSliceTime)/1000.0 + " seconds");
+
+
+        algo1.getPossibleSlices();
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Looking for best solution took " + (endTime - afterGereratAllPossibleSliceTime)/1000.0 + " seconds");
 
     }
 

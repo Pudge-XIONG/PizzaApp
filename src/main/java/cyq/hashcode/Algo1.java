@@ -1,8 +1,6 @@
 package cyq.hashcode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by zjyju on 11/02/2017.
@@ -22,18 +20,17 @@ public class Algo1 {
 
     protected char[][] cells;
 
-    private List<Slice> allPossibleSliceList = new ArrayList<>();
+    protected List<Slice> allPossibleSliceList = new ArrayList<>();
 
 
-    private List<List<Integer>> independentList = new ArrayList<>();
-    private int[][] independentArray;
+    protected List<List<Integer>> independentList = new ArrayList<>();
+    protected int[][] independentArray;
 
-    private List<Integer> combinaision = new ArrayList<>();
+    protected List<Integer> combinaision = new ArrayList<>();
 
-    private int max_surface;
-    private int current_surface;
-    private long max_try;
-
+    protected int max_surface;
+    protected int current_surface;
+    protected long max_try;
 
     public Algo1(Pizza pizza){
         R = pizza.getR();
@@ -46,7 +43,7 @@ public class Algo1 {
 
         max_surface = 0;
         current_surface=0;
-        max_try=10000;
+        max_try=1000;
     }
 
     public void generateAllPossibleSlice(){
@@ -132,7 +129,11 @@ public class Algo1 {
         int i=0;
         int n=0;    // loop index
 
+        // sort allPossibleSliceList
+        // allPossibleSliceList.sort( (o1, o2) -> Integer.compare(o2.getSurface(), o1.getSurface()) );
+
         while (max_surface<R*C && n<max_try) {
+            // allPossibleSliceList.sort((o1, o2) -> o1.getSurface() > o2.getSurface() ? + 1 : o1.getSurface() < o2.getSurface() ? -1 : 0 );
             Slice slice = allPossibleSliceList.get(i);
             List<Integer> comb = new ArrayList<>();
             comb.add(i);
@@ -149,13 +150,16 @@ public class Algo1 {
             */
             List<Integer> potentialSlices = getIndependentListOf(i);
 
+            long startTime = System.currentTimeMillis();
             if (potentialSlices.size()>0) {
                 current_surface = slice.getSurface() + addFirstValideSlice(potentialSlices, comb);
 
                 if (max_surface < current_surface) {
                     combinaision = comb;
                     max_surface = current_surface;
-                    System.out.println("current max surface is : " + max_surface);
+                    System.out.println("current max surface is : " + max_surface  );
+                    long endTime = System.currentTimeMillis();
+                    System.out.println("Looking current max surface took " + (endTime - startTime)/1000.0 + " seconds");
                 }
             }
 
@@ -180,7 +184,6 @@ public class Algo1 {
      * @version qxiong 20170213 replace independentArray[i] by using isOverLay(slice1, slice2) which returns detect if two slices are independent
      */
     public Integer addFirstValideSlice(List<Integer> potentialSlices, List<Integer> addedSlices)  {
-
         if (potentialSlices.size()>0) {
             Random rr = new Random();
             int s=rr.nextInt() % potentialSlices.size();
@@ -206,10 +209,8 @@ public class Algo1 {
                     }
 
                 }
-
                 return slice.getSurface() + addFirstValideSlice(remainSlices, addedSlices);
             }
-
             return slice.getSurface();
         }
 

@@ -13,6 +13,10 @@ public class AlgoYinxia extends Algo1 {
 
     private CellOfSlices [][] listSliceForEachCell = new CellOfSlices[R][C];
 
+
+
+
+
     public void generateAllPossibleSlice(){
 
         for(int r_num = 1; r_num <= H; r_num ++){
