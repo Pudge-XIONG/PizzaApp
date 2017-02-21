@@ -155,7 +155,11 @@ public class Algo1 {
                 if (max_surface < current_surface) {
                     combinaision = comb;
                     max_surface = current_surface;
-                    System.out.println("current max surface is : " + max_surface);
+                    System.out.println("\ncurrent max surface is : " + max_surface);
+                    for(int s:combinaision) {
+                        allPossibleSliceList.get(s).printSlice();
+                    }
+                    System.out.println("------------------------------------------");
                 }
             }
 

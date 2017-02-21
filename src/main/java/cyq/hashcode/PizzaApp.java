@@ -14,7 +14,7 @@ public class PizzaApp {
 
         long startTime = System.currentTimeMillis();
 
-        Pizza pizza = new Pizza("small.in");
+        Pizza pizza = new Pizza("big.in");
         long afterLoadingFileTime = System.currentTimeMillis();
         System.out.println("File loading took " + (afterLoadingFileTime - startTime)/1000.0 + " seconds");
 
