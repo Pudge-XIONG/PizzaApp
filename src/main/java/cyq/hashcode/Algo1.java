@@ -1,5 +1,7 @@
 package cyq.hashcode;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -156,6 +158,7 @@ public class Algo1 {
                     combinaision = comb;
                     max_surface = current_surface;
                     System.out.println("current max surface is : " + max_surface);
+                    printCombinaisionToFile(combinaision, max_surface, false);
                 }
             }
 
@@ -172,6 +175,39 @@ public class Algo1 {
             allPossibleSliceList.get(s).printSlice();
         }
 
+        printCombinaisionToFile(combinaision, max_surface, true);
+
+    }
+
+
+    public void printCombinaisionToFile(List<Integer> combinaision, int covered_surface, boolean isBest){
+        String outputFilePath;
+        if(isBest){
+            outputFilePath = "results/" + PizzaApp.inputName + "/" + "best-cover" + covered_surface + ".out";
+        } else{
+            outputFilePath = "results/" + PizzaApp.inputName + "/" + "cover" + covered_surface + ".out";
+        }
+
+
+        try{
+            PrintWriter writer = new PrintWriter(outputFilePath, "UTF-8");
+            writer.println(combinaision.size());
+            for(int s : combinaision) {
+                Slice slice = allPossibleSliceList.get(s);
+
+                writer.print(slice.getFirst_row());
+                writer.print(' ');
+                writer.print(slice.getFirst_column());
+                writer.print(' ');
+                writer.print(slice.getLast_row());
+                writer.print(' ');
+                writer.println(slice.getLast_column());
+                //allPossibleSliceList.get(s).printSlice();
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

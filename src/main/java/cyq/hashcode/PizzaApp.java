@@ -7,6 +7,8 @@ package cyq.hashcode;
 public class PizzaApp {
 
 
+    public static final String inputName = "medium";
+
     /**0
      * A main() so we can easily run these routing rules in our IDE
      */
@@ -14,7 +16,7 @@ public class PizzaApp {
 
         long startTime = System.currentTimeMillis();
 
-        Pizza pizza = new Pizza("small.in");
+        Pizza pizza = new Pizza(inputName + ".in");
         long afterLoadingFileTime = System.currentTimeMillis();
         System.out.println("File loading took " + (afterLoadingFileTime - startTime)/1000.0 + " seconds");
 
