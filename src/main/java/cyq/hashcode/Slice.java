@@ -53,4 +53,5 @@ public class Slice {
         System.out.print(last_column);
         System.out.println();
     }
+
 }
